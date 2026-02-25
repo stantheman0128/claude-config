@@ -1,0 +1,37 @@
+{
+  "enabledPlugins": {
+    "claude-mem@thedotmack": false,
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "github@claude-plugins-official": true
+  },
+  "autoUpdatesChannel": "latest",
+  "model": "haiku",
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "WebFetch(*)",
+      "Read",
+      "Edit",
+      "Write",
+      "Task(*)",
+      "mcp__*",
+      "Skill(*)"
+    ],
+    "ask": [
+      "Bash(git push --force *)",
+      "Bash(git rebase *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -r *)",
+      "Bash(rmdir *)",
+      "Bash(mv *)",
+      "Bash(del *)",
+      "Bash(shutdown *)",
+      "Bash(format *)",
+      "Bash(reboot *)"
+    ]
+  }
+}

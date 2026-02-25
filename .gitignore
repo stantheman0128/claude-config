@@ -1,0 +1,38 @@
+# Cache and temporary files
+cache/
+.credentials.json
+history.jsonl
+stats-cache.json
+
+# IDE and development
+ide/
+debug/
+file-history/
+
+# Telemetry and usage data
+telemetry/
+usage-data/
+statsig/
+
+# Session data
+session-env/
+shell-snapshots/
+
+# Downloads and backups
+downloads/
+backups/
+
+# Tasks and projects (usually project-specific)
+tasks/
+teams/
+projects/
+
+# Local Chrome settings
+chrome/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Settings overrides
+settings.local.json
