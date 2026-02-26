@@ -38,6 +38,13 @@
 - Zero context switching required from the user
 - Go fix failing CI tests without being told how
 
+### 7. Transparency on Tool Usage
+- **Always explicitly mention when an agent or skill is being triggered**
+- Start responses with indicators: "🤖 Using [agent-name]..." or "⚙️ Using [skill-name]..."
+- List which agent/skill is handling the current task
+- Users should always know what tools are being invoked
+- Example: "🤖 Using tech-stack-researcher to analyze your technology choice question..."
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/todo.md` with checkable items
