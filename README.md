@@ -7,14 +7,21 @@
 ### 核心設定檔
 
 - **settings.json** — Claude Code 的全域配置檔案
-  - 已啟用的插件清單（frontend-design、context7、code-review、github 等）
+  - 30+ 啟用的 plugins（official、superpowers、claude-mem）
   - 權限規則：允許、詢問、拒絕的指令清單
-  - 模型預設值與自動更新頻道設定
+  - Hooks 設定（careful guard、research guard）
+  - 環境變數（Agent Teams）
+  - 第三方 marketplace（thedotmack/claude-mem）
 
 - **CLAUDE.md** — 工作流程指引與專案管理規範
   - 計劃模式與子代理策略
   - 自我改進循環（lessons.md）
+  - 工具使用透明度
   - 核心原則：簡單優先、無懶惰、最小影響
+
+- **hooks/** — 自定義 hook 腳本
+  - `careful_guard.py` — 小心模式，封鎖危險指令（rm -rf、force push、DROP TABLE 等）
+  - `research_guard.py` — 研究模式，封鎖所有寫入操作
 
 ### agents/ — 自訂專業代理人
 
@@ -58,6 +65,7 @@ cp settings.json ~/.claude/settings.json
 cp CLAUDE.md ~/.claude/CLAUDE.md
 cp -r agents ~/.claude/agents
 cp -r commands ~/.claude/commands
+cp hooks/*.py ~/.claude/hooks/
 ```
 
 **Windows**
@@ -66,7 +74,10 @@ copy settings.json $env:USERPROFILE\.claude\settings.json
 copy CLAUDE.md $env:USERPROFILE\.claude\CLAUDE.md
 xcopy agents $env:USERPROFILE\.claude\agents /E /I
 xcopy commands $env:USERPROFILE\.claude\commands /E /I
+xcopy hooks $env:USERPROFILE\.claude\hooks /E /I
 ```
+
+> **注意**：`settings.json` 中的 hooks 路徑使用 `$HOME/.claude/hooks/`，需確認你的系統支援此變數展開。
 
 ## 🔄 多裝置同步
 
