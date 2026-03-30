@@ -36,3 +36,13 @@ Thumbs.db
 
 # Settings overrides
 settings.local.json
+
+# Ephemeral session/runtime files
+paste-cache/
+plans/
+sessions/
+todos/
+security_warnings_state_*.json
+
+# Plugin runtime (auto-managed by marketplace)
+plugins/

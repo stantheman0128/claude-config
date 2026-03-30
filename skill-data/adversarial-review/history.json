@@ -1,0 +1,14 @@
+{
+  "reviews": [],
+  "_schema": {
+    "report_topic": "被審閱的報告主題",
+    "date": "YYYY-MM-DD",
+    "report_file": "報告檔案路徑",
+    "fatal_issues": "致命問題數",
+    "major_issues": "重大問題數",
+    "insights_generated": "碰撞出的新洞見數",
+    "stance_changes": "立場變化數",
+    "top_insight": "最有價值的碰撞洞見（一句話）",
+    "recurring_pattern": "是否出現與過去相同的問題模式"
+  }
+}

@@ -28,6 +28,7 @@
       "Bash(git rebase *)"
     ]
   },
+  "model": "haiku",
   "hooks": {
     "PreToolUse": [
       {
@@ -35,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py \"$HOME/.claude/hooks/careful_guard.py\"",
+            "command": "py \"C:/Users/stans/.claude/hooks/careful_guard.py\"",
             "timeout": 5
           }
         ]
@@ -45,12 +46,114 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py \"$HOME/.claude/hooks/research_guard.py\"",
+            "command": "py \"C:/Users/stans/.claude/hooks/research_guard.py\"",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/stans/.claude/hooks/claude-mem-sync.mjs\" download",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"C:/Users/stans/.claude/hooks/fix-claude-mem-windows.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"C:/Users/stans/.claude/hooks/claude-mem-sync.mjs\" upload",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://localhost:19280/"
           }
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash C:/Users/stans/.claude/statusline.sh",
+    "padding": 1
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
@@ -84,8 +187,10 @@
     "typescript-lsp@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
     "double-shot-latte@superpowers-marketplace": true,
+    "episodic-memory@superpowers-marketplace": false,
     "superpowers-developing-for-claude-code@superpowers-marketplace": true,
     "superpowers-chrome@superpowers-marketplace": true,
+    "claude-session-driver@superpowers-marketplace": false,
     "claude-mem@thedotmack": true
   },
   "extraKnownMarketplaces": {
@@ -97,6 +202,8 @@
     }
   },
   "language": "中文",
+  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "autoDreamEnabled": true
 }

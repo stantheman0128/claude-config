@@ -86,3 +86,25 @@ Use file-system memory to start:
 - Store: past orders, stated preferences, opt-in notes
 - Inject only top-3 most relevant memories at conversation start
 - Upgrade to Mem0 when you hit semantic search needs
+
+## Gotchas
+
+### 1. 記憶注入過多
+- **問題**：把所有記憶都塞進 context，token 消耗暴增且干擾回答品質
+- **正確做法**：只注入 top-3 最相關記憶。用 recency + relevance 排序
+
+### 2. 沒有時間戳導致幻覺
+- **問題**：記憶沒有標記時間，過期事實被當作現在的真相
+- **正確做法**：每條記憶必須有 `timestamp`，讀取時檢查是否過期
+
+### 3. 記憶無限成長
+- **問題**：只寫不刪，JSON 檔案越來越大，最終拖慢讀取
+- **正確做法**：實作 consolidation 策略 — 定期合併相似記憶、刪除過期記憶
+
+### 4. Mem0 的 add() 是 upsert 不是 append
+- **問題**：以為 `m.add()` 會追加新記憶，實際上它可能更新已有的相似記憶
+- **正確做法**：理解 Mem0 的語義去重機制。如果需要保留歷史版本，用 metadata 區分
+
+### 5. 跨 session 記憶的 key 不一致
+- **問題**：不同 session 用不同格式的 user_id（有的帶前綴、有的不帶），導致記憶碎片化
+- **正確做法**：統一 user_id 格式，最好用平台原生 ID（如 LINE userId）

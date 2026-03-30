@@ -64,3 +64,25 @@ After compression, ask these questions — if the agent can answer correctly, co
 - Using tokens-per-request as the metric
 - No separate tracking for artifact trail (files modified)
 - Compressing too aggressively on first trigger
+
+## Gotchas
+
+### 1. 壓縮後丟失檔案路徑
+- **問題**：壓縮摘要只寫「修改了幾個檔案」，沒有保留具體路徑和行號
+- **正確做法**：Files Modified 區塊必須保留完整路徑，這是壓縮後最常被需要的資訊
+
+### 2. 決策理由被壓掉
+- **問題**：壓縮保留了「決定用方案 A」，但刪掉了「因為方案 B 有 X 問題」
+- **正確做法**：Decisions Made 區塊必須包含 rationale，否則未來無法判斷決策是否仍然有效
+
+### 3. 第一次觸發就壓太狠
+- **問題**：context 到 70% 就觸發壓縮，一次壓掉 90%+ 的歷史
+- **正確做法**：第一次壓縮保守一點（50-60% 壓縮率），後續再逐步加深。品質探針通過後才確認壓縮成功
+
+### 4. 混淆壓縮與刪除
+- **問題**：直接 truncate 舊 messages 而非 summarize
+- **正確做法**：壓縮 = 用結構化摘要替換原始內容，不是直接丟掉
+
+### 5. 壓縮後沒有驗證
+- **問題**：壓縮完就繼續工作，不確認關鍵資訊是否保留
+- **正確做法**：用 probe-based quality check（recall、artifact、continuation、decision 四個探針）驗證

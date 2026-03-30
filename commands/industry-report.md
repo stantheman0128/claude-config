@@ -2,6 +2,13 @@
 
 Generate a deep, niche industry research report in Traditional Chinese that matches 上游洞見 (Upstream Insights) editorial quality.
 
+**重要**：本 command 的知識庫已整合至 `~/.claude/skills/upstream-insights-report/` skill 資料夾。執行前請先讀取：
+- `gotchas.md` — Claude 寫報告常犯的錯誤（**必讀**）
+- `references/evaluation-criteria.md` — 選題評估標準
+- `references/source-types.md` — 非顯而易見來源清單
+- `templates/report-template.md` — 報告骨架模板
+- `scripts/html_extractor.py` — HTML 報告提取工具
+
 ## Input
 
 Optional argument: $ARGUMENTS

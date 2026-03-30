@@ -1,0 +1,18 @@
+{
+  "reports": [],
+  "_schema": {
+    "topic": "報告主題",
+    "date": "YYYY-MM-DD",
+    "file_path": "報告檔案路徑",
+    "topic_scores": {
+      "niche": "1-10",
+      "taiwan_depth": "1-10",
+      "timeline": "1-10",
+      "research_difficulty": "1-10"
+    },
+    "companies_covered": ["公司名（股票代號）"],
+    "word_count": "字數",
+    "reference_count": "參考來源數",
+    "notes": "任何值得記錄的觀察"
+  }
+}

@@ -30,6 +30,24 @@ Apply when:
 - Response quality degrades with conversation length
 - Costs rising due to large, repeated context (e.g. large system prompt sent every turn)
 
+## Gotchas
+
+### 1. Cache TTL 過期沒處理
+- **問題**：以為 cache 一直在，但 Anthropic prompt cache TTL 只有 5 分鐘。超過後重新計費
+- **正確做法**：高頻對話（<5 min 間隔）才值得 cache。低頻場景反而多花 25% write cost
+
+### 2. 動態內容放在 cache 區塊前面
+- **問題**：把變動頻繁的 user context 放在 system prompt 前面，導致每次都 cache miss
+- **正確做法**：穩定內容（system prompt、工具定義、知識庫）放前面，動態內容放後面
+
+### 3. Observation masking 太早
+- **問題**：tool output 還沒被用於決策就被 mask 掉了
+- **正確做法**：只在 agent 已經基於 output 做出決策後才 mask。Mask 時保留決策結果
+
+### 4. 以為 KV-cache 能跨 session
+- **問題**：期望上一個 session 的 cache 在新 session 還有效
+- **正確做法**：KV-cache 是 request 級別的，只在同一 session 的連續請求間有效
+
 ## Prompt Caching Example (Anthropic API)
 
 ```python
