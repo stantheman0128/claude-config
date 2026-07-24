@@ -1,20 +1,37 @@
 ---
 name: write-like-shasha77
-description: "以志祺七七（shasha77）YouTube 主線議題型風格撰寫影片腳本，繁體中文。當使用者說「寫志祺七七腳本」「仿志祺」「write-like-shasha77」「志祺風格」「幫志祺寫稿」「產志祺七七逐字稿」「志祺七七提案/大綱/標題」，或要一篇 3,000-3,500 字的志祺口白逐字稿時使用。四段式工作流可獨立調用：①主題提案+切角 ②寫作指引+大綱 ③口白逐字稿 ④影片標題+縮圖標題+配圖說明。規則以專案 style-spec 四檔為單一真相源。"
+description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，繁體中文，涵蓋兩個系列：主線議題型（預設）與《七七說書》單集導讀。當使用者說「寫志祺七七腳本」「仿志祺」「write-like-shasha77」「志祺風格」「幫志祺寫稿」「產志祺七七逐字稿」「志祺七七提案/大綱/標題」，或說「七七說書」「說書風格」「寫說書腳本」要一集導讀某本書的稿，或要一篇 3,000-3,500 字的志祺口白逐字稿時使用。四段式工作流可獨立調用：①主題提案+切角 ②寫作指引+大綱 ③口白逐字稿 ④影片標題+縮圖標題+配圖說明。規則以專案 style-spec 為單一真相源：共同層 channel-common 兩系列共用，系列層依系列參數擇一（mainline｜series/qiqi-shushu）。"
 ---
 
-# Write Like Shasha77 — 志祺七七主線腳本生成
+# Write Like Shasha77 — 志祺七七腳本生成
 
-你正在替志祺七七（YouTube 頻道）撰寫**主線議題型**影片腳本。這類影片是單一議題講解型、由口白唸稿、有官方人工字幕。你不是在寫報告或文章，是在寫「一個人對著鏡頭把一件事講清楚」的口播稿。
+你正在替志祺七七（YouTube 頻道）撰寫影片腳本。這類影片是講解型、由口白唸稿、有官方人工字幕。你不是在寫報告或文章，是在寫「一個人對著鏡頭把一件事講清楚」的口播稿。頻道有兩個系列：主線議題型（單一議題講解，預設）與《七七說書》（單集導讀一本書），動筆前先看下方「系列參數」定系列。
 
-這支 skill 是**工作流的殼**，不是規則書。所有可執行規則、頻次上限、逐字引句、反例，全部住在專案的 `style-spec/` 四份檔案裡。本檔只負責：把流程對齊職缺的編輯台協作流、告訴你每一步該讀哪份 spec、該產出什麼、該怎麼自檢。**規則有疑義一律回 spec 原文為準，本檔不複製、不改寫任何規則數字。**
+這支 skill 是**工作流的殼**，不是規則書。所有可執行規則、頻次上限、逐字引句、反例，全部住在專案的 `style-spec/` 檔案裡。本檔只負責：把流程對齊職缺的編輯台協作流、告訴你每一步該讀哪份 spec、該產出什麼、該怎麼自檢。**規則有疑義一律回 spec 原文為準，本檔不複製、不改寫任何規則數字。**
+
+## 系列參數（先定系列，再讀 spec）
+
+這支 skill 涵蓋志祺七七的兩個系列。動筆前先認系列，它決定第 0 步讀哪一份「系列層」spec：
+
+| 系列參數 | 何時走這條 | 系列層 spec（讀這份） | 主體引擎 |
+|---|---|---|---|
+| `mainline`（預設） | 單一議題講解型影片；使用者沒特別指定系列 | `style-spec/mainline.md` | 深入分析 ×N，頻道自己組織論點 |
+| `shushu` | 使用者說「七七說書」「說書風格」「寫說書腳本」，或要「導讀某本書」的單集 | `style-spec/series/qiqi-shushu.md` | 導讀章節 ×N，逐章拆一本書、主張全歸作者/書中 |
+
+兩個系列共用同一份**共同層** `channel-common.md`（R1-R17 全部適用：字數、語速、句長、口癖、設問三段式、數據格式、口語毛邊、書面詞與金句黑名單、事實歸屬鐵則、第二人稱上限、開場結尾兩個固定框）。系列參數只切換「系列層」那一份，換掉的是主體引擎、觀點段觸發語、收尾群。這就是 SPEC §6 兩級設計的落地方式：換系列只換系列層，共同層不動。
+
+- **預設 `mainline`**。沒有明確說書訊號就走主線。
+- **`shushu` 專屬要點**（book_info 取代事件背景、每段主張掛「作者認為/書中提到」、觀點段兼書評、分享籲請塞書名、選配書籍導購與 scope_note）全寫在 `series/qiqi-shushu.md`，它只寫「說書相對主線多出或不同」的部分，共同層照跑，R17-2 事實歸屬在說書更吃重。
+- 說書系列的盲評用 `scripts/blind_judge_shushu.py` 產卷、`score_single.py --mode shushu` 對分，與主線分開追（見「盲評自測」段與 CHANGELOG 的騙過率基線）。
 
 ## 第 0 步（每次都做）：精讀四份 style-spec
 
 動筆前先把這四份讀進脈絡（絕對路徑，spec 迭代時本 skill 不需同步）：
 
 1. `C:\Users\stans\Projects\shasha77\style-spec\channel-common.md` — 頻道共同層：硬規則（字數/語速/句長/詞彙）、口癖詞庫與上限、修辭手冊（R6-R10）、觀點段原則（R11-R15）、口語毛邊（R16 全套）、反 AI 慣性三則（R17-1 金句收束／R17-2 事實歸屬／R17-3 人稱視角）、**第六節定稿自檢清單**。
-2. `C:\Users\stans\Projects\shasha77\style-spec\mainline.md` — 主線議題型專屬：八段骨架（開頭鉤子→hiho 自介→工商→背景→深入分析×N→我們的觀點→提問→結尾）、各段寫法、業配轉場固定文本、轉場句庫、CTA 公式、結尾框。
+2. **系列層（依系列參數擇一，只讀對應那份）**：
+   - 主線 → `C:\Users\stans\Projects\shasha77\style-spec\mainline.md`：八段骨架（開頭鉤子→hiho 自介→工商→背景→深入分析×N→我們的觀點→提問→結尾）、各段寫法、業配轉場固定文本、轉場句庫、CTA 公式、結尾框。
+   - 說書 → `C:\Users\stans\Projects\shasha77\style-spec\series\qiqi-shushu.md`：骨架同源，主體換成逐章導讀一本書（book_info→導讀章節×N→觀點兼書評→分享籲請塞書名→選配導購），附各環節出現率與固定框逐字。
 3. `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` — 真稿選段（逐字標出處）：hook×3、轉場×3、觀點段×2、業配×2、outro×1。仿寫時對照語感，不要整段抄。
 4. `C:\Users\stans\Projects\shasha77\style-spec\anti-examples.md` — 八類「這樣寫就不像」反例＋正解對照＋快速對照表。寫完拿它回頭掃自己的稿。
 
@@ -96,6 +113,8 @@ description: "以志祺七七（shasha77）YouTube 主線議題型風格撰寫�
 4. 對分：`python scripts/score_single.py --mode test` — 由程式直接讀密封正解算 ①總準確率（≤55% 才算過關線，愈低愈好）②真稿被正判率 ③**仿稿騙過率**（仿稿被判 REAL 的比例，愈高愈成功），寫進 `reports/blind_judge_005.md`。
 5. **把這一版的仿稿騙過率記進本 skill 的 CHANGELOG.md**。基線 R3=40%，每版要求逐版上升。過關硬閘是總準確率 ≤55%（目前尚未達成，見 CHANGELOG）。
 
+> **說書系列走同一套盲評，只換腳本**：產卷 `python scripts/blind_judge_shushu.py`（seed 91；正式組=10 真說書 corpus/shushu_* + 10 仿說書 s01_shushu 單篇切 10 段），判定寫 `data/shushu_responses.json`，對分 `python scripts/score_single.py --mode shushu`（讀密封正解 `data/shushu_answers.json`），報告 `reports/blind_judge_shushu.md`。說書基線騙過率與主線分開追，見 CHANGELOG。
+
 ## 交付註記
 
 - **對外交付前過 humanizer-zh-tw**：試稿要投遞或給編輯前，跑 `/humanizer-zh-tw` 清 AI 痕跡（Stan 全域慣例）。注意這跟本 skill 的口語毛邊規則方向一致，不衝突：兩者都在去書面 AI 腔。
@@ -106,13 +125,16 @@ description: "以志祺七七（shasha77）YouTube 主線議題型風格撰寫�
 
 | 用途 | 絕對路徑 |
 |---|---|
-| 規則（共同層＋自檢清單） | `C:\Users\stans\Projects\shasha77\style-spec\channel-common.md` |
-| 規則（主線骨架） | `C:\Users\stans\Projects\shasha77\style-spec\mainline.md` |
+| 規則（共同層＋自檢清單，兩系列共用） | `C:\Users\stans\Projects\shasha77\style-spec\channel-common.md` |
+| 規則（系列層：主線骨架） | `C:\Users\stans\Projects\shasha77\style-spec\mainline.md` |
+| 規則（系列層：說書手冊） | `C:\Users\stans\Projects\shasha77\style-spec\series\qiqi-shushu.md` |
 | 真稿選段 | `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` |
 | 反例集 | `C:\Users\stans\Projects\shasha77\style-spec\anti-examples.md` |
 | 查重（志祺做過的題） | `C:\Users\stans\Projects\shasha77\data\corpus_index.json` |
 | 真稿全文（拿不準先搜） | `C:\Users\stans\Projects\shasha77\corpus\` |
 | research 查證檔 | `C:\Users\stans\Projects\shasha77\drafts\research_XXX.md` |
 | 逐字稿產出 | `C:\Users\stans\Projects\shasha77\drafts\XXX_主題.md` |
-| 盲評產卷/對分 | `C:\Users\stans\Projects\shasha77\scripts\blind_judge_v4.py`、`score_single.py` |
-| 盲評報告 | `C:\Users\stans\Projects\shasha77\reports\blind_judge_005.md` |
+| 盲評產卷/對分（主線） | `C:\Users\stans\Projects\shasha77\scripts\blind_judge_v4.py`、`score_single.py --mode test` |
+| 盲評產卷/對分（說書） | `C:\Users\stans\Projects\shasha77\scripts\blind_judge_shushu.py`、`score_single.py --mode shushu` |
+| 盲評報告（主線） | `C:\Users\stans\Projects\shasha77\reports\blind_judge_005.md` |
+| 盲評報告（說書） | `C:\Users\stans\Projects\shasha77\reports\blind_judge_shushu.md` |

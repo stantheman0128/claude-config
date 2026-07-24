@@ -2,6 +2,18 @@
 
 騙過率＝盲評中仿稿被判 REAL 的比例（愈高愈成功）。過關硬閘另計：正式組總準確率 ≤55%（愈低愈好，50% ＝完全分不出）。兩個指標分開追。
 
+## v1.1.0（2026-07-24）｜說書系列上線
+
+Phase 3a 系列泛化：skill 加**系列參數**（`mainline` 預設｜`shushu`），共同層 `channel-common.md`（R1-R17）兩系列共用，系列參數只切換系列層那一份。新增系列層 `style-spec/series/qiqi-shushu.md`（《七七說書》單集導讀手冊，出現率取自 batch_0-4 的 50 支已編碼單集），觸發詞補「七七說書」「說書風格」「寫說書腳本」。說書仿稿首篇 `drafts/s01_shushu.md` 過共同層自檢。
+
+盲評對分核心沿用 `score_single.py`，新增 `--mode shushu`（讀密封正解 `data/shushu_answers.json`、答案 `data/shushu_responses.json`、寫 `reports/blind_judge_shushu.md`）；產卷腳本 `scripts/blind_judge_shushu.py`（seed 91）。
+
+### 說書系列盲評基線（首測）
+
+- **仿說書騙過率 ＝ 60%（6/10）**：單段獨立盲評，正式組 10 真說書（corpus/shushu_*）+ 10 仿說書（s01_shushu 單篇切 10 段），程式讀密封正解計算。
+- 同輪真說書被正判率 100%（10/10）、總準確率 70%（14/20），過關硬閘 ≤55% 未達（FAIL）。
+- 對照主線 Phase 2 實測（騙過率 70%、準確率 60%）：說書首篇仿稿只憑「共同層繼承 + 薄系列層」即落在同一量級，證實 SPEC §6 兩級設計的共同層繼承成立；缺口屬系列層需再迭代仿稿，非繼承失效。詳見 `reports/phase3a_audit.md`、`reports/blind_judge_shushu.md`。
+
 ## v1.0.0（2026-07-24）
 
 首版：把 SPEC §6 的四層 style-spec 體系包成四段式可調用工作流的殼。skill 本體不複製規則，指向 `style-spec/` 四檔為單一真相源。四段對齊職缺編輯台協作流（提案+切角／指引+大綱／逐字稿／標題+縮圖+配圖），各段可獨立調用。內建定稿自檢迴圈（含 R16/R17 逐詞計數與歸屬對照）與選配盲評自測（blind_judge_v4 + score_single）。
@@ -30,3 +42,4 @@ R1 另記一次誤報事故：workflow 首報 PASS 係 prep agent 轉述密封�
 |---|---|---|---|---|---|
 | v1.0.0（R3 基線） | 2026-07-24 | 40% | 75% | 否 | 沿用 blind_judge_005 結果（drafts 001-005） |
 | v1.0.0（Phase 2 實測） | 2026-07-24 | **70%（7/10）** | **60%（12/20）** | 否 | 全新獨立盲評，drafts 006/007/008（4/3/3），程式讀 `data/p2_answers.json` 對分；真稿正判率 90%。騙過率較 R3 +30pt、準確率 -15pt，逼近但未跨 ≤55% 硬閘。詳見 `reports/phase2_audit.md` |
+| v1.1.0（說書系列首測） | 2026-07-24 | **60%（6/10）** | **70%（14/20）** | 否 | 系列＝shushu。10 真說書 + 10 仿說書（s01_shushu 單篇切 10 段，seed 91），程式讀 `data/shushu_answers.json` 對分；真說書正判率 100%。首篇仿稿即達主線量級，共同層繼承成立。詳見 `reports/blind_judge_shushu.md`、`reports/phase3a_audit.md` |
