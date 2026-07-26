@@ -15,7 +15,7 @@
   - 前端視覺/UI → `impeccable`；元件架構/React 寫法 → `agent-skills:frontend-ui-engineering`
   - API/介面/seam 設計 → `agent-skills:api-and-interface-design`
   - 安全深度稽核 → `security-audit`（吃 token）；設計期威脅建模 → `agent-skills:security-and-hardening`
-  - git → `agent-skills:git-workflow-and-versioning`；worktree/收尾分支 → `superpowers:using-git-worktrees` / `finishing-a-development-branch`
+  - git → `agent-skills:git-workflow-and-versioning`；worktree/收尾分支 → `superpowers:using-git-worktrees` / `finishing-a-development-branch`；卡在 merge/rebase 衝突中 → `resolving-merge-conflicts`
   - 逼問計畫 → `grilling`；還沒計畫先挖意圖 → `agent-skills:interview-me`
   - 完整判準、冷藏區（已停用 skill 清單與復原法）→ 載 `skill-routing`
 - 載入時在回覆標「⚙️ Using <skill>」（配合第 7 條 live trace），結尾對帳單也要出現。
@@ -68,6 +68,16 @@ Stan explicitly wants long, detailed replies for substantive work, with a runnin
 - **NEVER fake it (謊報 guard).** A `⚙️` marker must correspond to an actual Skill-tool invocation — the `Stop` hook logs real skill loads to `~/.claude/skill-usage/session-*.json`, so a padded marker will not match the record. Don't sprinkle markers to look busy. If a turn used zero skills, the footer says `skill=（無，本回合只用工具）` — that is the honest answer, not a failure.
 - **Scope by size.** Substantive / multi-step tasks get the full trace + footer. Trivial one-shot answers stay short — no ceremony, maybe just the footer if any skill fired.
 - The keyword-nudge hook (`skill-suggest.py`, UserPromptSubmit) only whispers to me; it never reaches Stan's screen. Anything he should see, I write out myself per the rules above. See memory [[howto-skill-triggering-system]] and [[feedback-inline-skill-trace]].
+
+### 8. Evidence Discipline / 證據紀律（2026-07-14 加入，源自 Anthropic reduce-hallucinations）
+
+第 7 條管「誠實說我**做了**什麼」；這條管「誠實說我**知道**什麼」。
+
+- **准我說「我不知道」。** 查不到、驗不了、不確定就明講。官方實測：明確給予承認不確定的許可，能大幅減少假資訊。**空白比補完便宜。** subagent 回報「查不到」是合格答案，不是失敗——派工單要明說這件事。
+- **撤回，不要軟化。** 產出後逐條主張回頭找支撐（tool result / `file:line` / 逐字引句）。**找不到支撐就刪掉整條主張**，不是改寫成「可能」「似乎」「應該」。模糊措辭正是讓捏造活下來的機制。
+- **長來源先抽引句再作答。** 超過約 20k token 的文件/log，先逐字抽出相關原文，再基於引句分析。不要憑通讀印象總結。
+- **外部知識封鎖。** 問題綁定在特定 repo/文件時，明講只准用該來源。版本號、API 簽名、設定鍵名、旗標名稱——這四類**永遠**要現場查，不准從記憶生成。
+- **假設也要先證明，不只結論。** 動手修之前，先驗證「要修的東西真的壞了」。（2026-07-14 實例：我推論 AGENTS.md 被 CLAUDE.md 汙染，推論鏈每一環都合理，結論是錯的；scout 實掃後零命中。若照假設直接動手，我會去修一個不存在的問題。）
 
 ## Task Management
 
