@@ -24,11 +24,12 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 - **`shushu` 專屬要點**（book_info 取代事件背景、每段主張掛「作者認為/書中提到」、觀點段兼書評、分享籲請塞書名、選配書籍導購與 scope_note）全寫在 `series/qiqi-shushu.md`，它只寫「說書相對主線多出或不同」的部分，共同層照跑，R17-2 事實歸屬在說書更吃重。
 - 說書系列的盲評用 `scripts/blind_judge_shushu.py` 產卷、`score_single.py --mode shushu` 對分，與主線分開追（見「盲評自測」段與 CHANGELOG 的騙過率基線）。
 
-## 第 0 步（每次都做）：精讀四份 style-spec
+## 第 0 步（每次都做）：精讀五份 style-spec
 
 動筆前先把這四份讀進脈絡（絕對路徑，spec 迭代時本 skill 不需同步）：
 
-1. `C:\Users\stans\Projects\shasha77\style-spec\channel-common.md` — 頻道共同層：硬規則（字數/語速/句長/詞彙）、口癖詞庫與上限、修辭手冊（R6-R10）、觀點段原則（R11-R15）、口語毛邊（R16 全套）、反 AI 慣性三則（R17-1 金句收束／R17-2 事實歸屬／R17-3 人稱視角）、**第六節定稿自檢清單**。
+1. `C:\Users\stans\Projects\shasha77\style-spec\channel-common.md` — 頻道共同層：硬規則（字數/語速/句長/詞彙）、口癖詞庫與上限、修辭手冊（R6-R10）、觀點段原則（R11-R15）、口語毛邊（R16 全套）、反 AI 慣性三則（R17-1 金句收束／R17-2 事實歸屬／R17-3 人稱視角）、真實感配方與破綻黑名單（R18）、**第六節定稿自檢清單**。
+1.5. `C:\Users\stans\Projects\shasha77\style-spec\content-editing.md` — **內容編輯規則 R19**（能不能刊，跟「像不像」分開管）：來源密度與類型靶區、時線自洽、正反形態、耳朵規則（單段數字/句長）、觀點段分工（資訊段給來源、判斷留觀點段）、標題支票、口播敘事紀律。基準值全部來自 30 支真稿實測（reports/content_baseline.md），不是編輯直覺。
 2. **系列層（依系列參數擇一，只讀對應那份）**：
    - 主線 → `C:\Users\stans\Projects\shasha77\style-spec\mainline.md`：八段骨架（開頭鉤子→hiho 自介→工商→背景→深入分析×N→我們的觀點→提問→結尾）、各段寫法、業配轉場固定文本、轉場句庫、CTA 公式、結尾框。
    - 說書 → `C:\Users\stans\Projects\shasha77\style-spec\series\qiqi-shushu.md`：骨架同源，主體換成逐章導讀一本書（book_info→導讀章節×N→觀點兼書評→分享籲請塞書名→選配導購），附各環節出現率與固定框逐字。
@@ -90,7 +91,7 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 
 ## 自檢迴圈（第三段寫完必跑）
 
-打開 `channel-common.md` 第六節「自檢清單」，逐項打勾。任一項不過就回稿修，修到全過為止。清單涵蓋字數、開場結尾框、口癖計數、設問三位置、數據格式、句長、嚴肅題無吐槽、觀點段、R15 紅線、R16-1~R16-5、R17-1~R17-3。
+打開 `channel-common.md` 第六節「自檢清單」，逐項打勾。任一項不過就回稿修，修到全過為止。清單涵蓋字數、開場結尾框、口癖計數、設問三位置、數據格式、句長、嚴肅題無吐槽、觀點段、R15 紅線、R16-1~R16-5、R17-1~R17-3、R18 配方與黑名單，最後一條會把你導去 `content-editing.md` 的 R19 內容編輯清單（來源密度／時線自洽／正反形態／耳朵規則／觀點分工／標題支票／口播敘事）——風格自檢過了不等於能刊，R19 也要全過。
 
 需要逐詞計數的項目（自己動手數，別憑感覺）：
 
@@ -130,6 +131,8 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 | 規則（系列層：說書手冊） | `C:\Users\stans\Projects\shasha77\style-spec\series\qiqi-shushu.md` |
 | 真稿選段 | `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` |
 | 反例集 | `C:\Users\stans\Projects\shasha77\style-spec\anti-examples.md` |
+| 內容編輯規則（R19＋清單） | `C:\Users\stans\Projects\shasha77\style-spec\content-editing.md` |
+| 內容基準值（30 支真稿實測） | `C:\Users\stans\Projects\shasha77\reports\content_baseline.md` |
 | 查重（志祺做過的題） | `C:\Users\stans\Projects\shasha77\data\corpus_index.json` |
 | 真稿全文（拿不準先搜） | `C:\Users\stans\Projects\shasha77\corpus\` |
 | research 查證檔 | `C:\Users\stans\Projects\shasha77\drafts\research_XXX.md` |
