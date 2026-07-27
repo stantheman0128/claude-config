@@ -60,7 +60,7 @@ scout 一波後：在最好的 1–2 個 affinity repo（Windows／zh-TW／台�
 
 ## @mention 與 case study
 
-- 人類 @`stantheman0128`：**一律回覆**（ack + 立場）。既有 factory PR 的 standing autonomy 涵蓋這類回覆。
+- 人類 @`stantheman0128`：**一律回覆**（ack + 立場）。**對方用什麼語言就用什麼語言回**（英文 thread 回英文；中文 thread 回繁體中文）。既有 factory PR 的 standing autonomy 涵蓋這類回覆。
 - 被 credit／fold-into／因超集關閉：當日追加 `handoff/CASE-STUDIES.md`（漏了什麼 + 下一題怎麼做滿）。見 `AGENTS.md` Merge completeness bar。
 
 ## CI triage
