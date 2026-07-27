@@ -53,6 +53,7 @@ exit 2 → 立刻換題。只有 `CLAIM_OK` 後才重現／寫碼。
 7. 品質閘見 `AGENTS.md`（AI 政策、HEAD 重現、測試、Evidence、Merge completeness bar）。**UI／設定頁／daemon：product-path Evidence 必備（arozos #289）。**
 8. Check 3 後自行發佈（預設池 + Stan 點名授權的 repo）：fork `stantheman0128` → push → `gh pr create`（neo base=`dev`）。節流：每 repo ≤3 open、每天 ≤3 新 PR、間隔 ≥1h。
 9. claim 補 `pr:`；LEDGER → `published`；收工用 handoff skill 寫 `HANDOFF.md` 一節。
+10. **收工後：**執行 `.\scripts\factory-maintain.ps1`（清 claims、歸檔 handoff/LEDGER/HANDOFF、刷新 PROGRESS）。預覽用 `-DryRun`。
 
 ## Deepen before scatter（2026-07-24）
 
