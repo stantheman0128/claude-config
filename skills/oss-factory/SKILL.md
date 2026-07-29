@@ -34,6 +34,15 @@ claude-{yyyyMMdd-HHmmssfff}
 
 例：`claude-20260718031600123`（含毫秒）。並行時幾乎不會撞號。同一 session 重跑沿用同一 id。
 
+## Stan 的兩個指令
+
+| 指令 | 用途 | 規則檔 |
+|------|------|--------|
+| **`update`** | 狀態巡檢：merged 進度、open PR 債務、@mention、被動等待 | `.cursor/rules/factory-update.mdc` |
+| **`new`** | 找新工作：`new` / `new stuff` / `new PR` / `新票` / `可以做什麼` 等 | `.cursor/rules/factory-new.mdc` |
+
+不要反問要查什麼；直接跑完整流程後回報。
+
 ## 必做迴圈
 
 0. **PR 輪迴（挖新票前）**：查 `stantheman0128` 的 open PR。優先：`CHANGES_REQUESTED`／未回的 maintainer 留言 → 真 CI 紅燈。在既有 fork 分支修並 push；更新 LEDGER／HANDOFF。若該 issue 的 claim 被別的 session 持有就換下一支。可做「只清 review」的 session。然後才挖新票。
