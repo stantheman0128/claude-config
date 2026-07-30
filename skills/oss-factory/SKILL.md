@@ -38,7 +38,7 @@ claude-{yyyyMMdd-HHmmssfff}
 
 | 指令 | 用途 | 規則檔 |
 |------|------|--------|
-| **`update`** | 狀態巡檢：merged 進度、open PR 債務、@mention、被動等待 | `.cursor/rules/factory-update.mdc` |
+| **`update`** | 狀態巡檢：merged 進度、open PR 債務、**@mention / 回覆我們留言的 thread**、被動等待 | `.cursor/rules/factory-update.mdc` |
 | **`new`** | 找新工作：`new` / `new stuff` / `new PR` / `新票` / `可以做什麼` 等 | `.cursor/rules/factory-new.mdc` |
 
 不要反問要查什麼；直接跑完整流程後回報。
