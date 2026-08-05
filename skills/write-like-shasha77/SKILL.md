@@ -74,12 +74,13 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 目標：照定稿大綱寫出完整口白逐字稿。
 
 1. **先查證存檔**：把大綱資料點缺口逐一 WebSearch 查證，結果寫成 research 檔存 `C:\Users\stans\Projects\shasha77\drafts\research_XXX.md`（沿用現有命名），每點列來源欄（含多來源鏈的層級）。逐字稿寫作時打開對應 research 檔，照來源欄一字不改抄歸屬（R17-2）。
-2. 照 mainline.md 八段骨架寫。開場 `hiho～大家好，我是志祺！`、前置工商主公式、結尾框都是固定文本，直接複製（channel-common R5、mainline 第三節）。
-3. 全程守 channel-common 的硬規則與修辭規則：字數（R1）、句長偏長（R3）、口癖上限（第二節）、設問三位置（R6）、數據格式（R8）、觀點段（R11-R14）。
-4. 留住口語毛邊（R16 全套：章節標題卡、換氣填詞、口語冗餘、書面詞黑名單、功能詞回聲）。
-5. 拆掉 AI 慣性三破綻（R17：不寫自評式金句、歸屬不混併、第二人稱不過密）。
-6. 嚴肅題全程無吐槽、走共感（R10）。
-7. 寫完進**自檢迴圈**（見下）。過了再進第四段。逐字稿存 `drafts\XXX_主題.md`。
+2. **觀點規劃表先行**：複製 `C:\Users\stans\Projects\shasha77\templates\viewpoint-plan.md` 為 `drafts\XXX_viewpoint.md` 填完（立場盤點/落點/責任切割/位置 C 問句），觀點段動筆前必須存在且填滿；觀點段每句承重話回對本表。
+3. 照 mainline.md 八段骨架寫。開場 `hiho～大家好，我是志祺！`、前置工商主公式、結尾框都是固定文本，直接複製（channel-common R5、mainline 第三節）。
+4. 全程守 channel-common 的硬規則與修辭規則：字數（R1）、句長偏長（R3）、口癖上限（第二節）、設問三位置（R6）、數據格式（R8）、觀點段（R11-R14）。
+5. 留住口語毛邊（R16 全套：章節標題卡、換氣填詞、口語冗餘、書面詞黑名單、功能詞回聲）。
+6. 拆掉 AI 慣性三破綻（R17：不寫自評式金句、歸屬不混併、第二人稱不過密）。
+7. 嚴肅題全程無吐槽、走共感（R10）。
+8. 寫完進**自檢迴圈**（見下）。過了再進第四段。機械自檢可先跑 `python C:\Users\stans\Projects\shasha77\scripts\check_draft.py`（字數/長句/口癖/歸屬弱代理）與 `python C:\Users\stans\Projects\shasha77\scripts\check_research.py`（research 檔格式），exit 0 再走人工清單。逐字稿存 `drafts\XXX_主題.md`。
 
 ### 第四段｜影片標題 ×3 + 縮圖標題 ×2 + 配圖說明
 
