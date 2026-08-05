@@ -60,8 +60,8 @@ exit 2 → 立刻換題。只有 `CLAIM_OK` 後才重現／寫碼。
 4. `LEDGER.md` 加 `in-progress`。
 5. 只在 `<repo>-wt/<item>/` 改碼。禁止寫 `FROZEN.md` 路徑與 `_archive/`。
 6. Check 2：`claim.ps1 -VerifyOnly` + 串行 `gh` 查覆蓋 PR。
-7. 品質閘見 `AGENTS.md`（AI 政策、HEAD 重現、測試、Evidence、Merge completeness bar）。**UI／設定頁／daemon：product-path Evidence 必備（arozos #289）。**
-8. Check 3 後自行發佈（預設池 + Stan 點名授權的 repo）：fork `stantheman0128` → push → `gh pr create`（neo base=`dev`）。節流：每 repo ≤3 open、每天 ≤3 新 PR、間隔 ≥1h。
+7. 品質閘見 `AGENTS.md`（AI 政策、HEAD 重現、測試、Evidence、Merge completeness bar、**Hard rule 4c 上游 PR gate audit**）。**UI／設定頁／daemon：product-path Evidence 必備（arozos #289）。**
+8. **Check 3**（covering PR + **4c 審計**：讀 workflows/template、對照 body/commit 長度上限、寫入 publish 備忘）後自行發佈（預設池 + Stan 點名授權的 repo）：fork `stantheman0128` → push → `gh pr create`（neo base=`dev`）。節流：每 repo ≤3 open、每天 ≤3 新 PR、間隔 ≥1h。
 9. claim 補 `pr:`；LEDGER → `published`；收工用 handoff skill 寫 `HANDOFF.md` 一節。
 10. **寫 HANDOFF 前：**若本 session 有 merge/close/publish/drop 或改 LEDGER，再跑一次 `.\scripts\factory-maintain.ps1`。
 
