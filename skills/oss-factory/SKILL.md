@@ -25,6 +25,7 @@ user-invocable: true
 4. `claims/` 檔名（認領時再讀 `claims/README.md`）
 5. `CANDIDATES.md`（`open` / `claimed` / `blocked`）
 6. `FACTORY-TARGET.md`（目標 **100 merged|integrated**，不算 published）
+7. `FACTORY-2.0.md`（`core` / 可以做什麼 時必讀）
 
 ## Session id
 
@@ -34,18 +35,19 @@ claude-{yyyyMMdd-HHmmssfff}
 
 例：`claude-20260718031600123`（含毫秒）。並行時幾乎不會撞號。同一 session 重跑沿用同一 id。
 
-## Stan 的兩個指令
+## Stan 的指令
 
 | 指令 | 用途 | 規則檔 |
-|------|------|--------|
-| **`update`** | 狀態巡檢：merged 進度、open PR 債務、**@mention / 回覆我們留言的 thread**、被動等待 | `.cursor/rules/factory-update.mdc` |
-| **`new`** | 找新工作：`new` / `new stuff` / `new PR` / `新票` / `可以做什麼` 等 | `.cursor/rules/factory-new.mdc` |
+|---|---|---|
+| **`core` / `2.0` / `顧櫃`** | 預設。同櫃別人的 PR、self-found、契約級修法 | `FACTORY-2.0.md` |
+| **`update`** | 狀態巡檢：merged、open 債、@mention；附 2.0 看板一行 | `.cursor/rules/factory-update.mdc` |
+| **`new` / `新票`** | 1.0 找票（節流；「可以做什麼」不要走這裡） | `.cursor/rules/factory-new.mdc` |
 
 不要反問要查什麼；直接跑完整流程後回報。
 
 ## 必做迴圈
 
-0. **PR 輪迴（挖新票前）**：查 `stantheman0128` 的 open PR。優先：`CHANGES_REQUESTED`／未回的 maintainer 留言 → 真 CI 紅燈。在既有 fork 分支修並 push；更新 LEDGER／HANDOFF。若該 issue 的 claim 被別的 session 持有就換下一支。可做「只清 review」的 session。然後才挖新票。
+0. **PR 輪迴（挖新票前）**：查 `stantheman0128` 的 open PR。優先：`CHANGES_REQUESTED`／未回的 maintainer 留言 → 真 CI 紅燈。在既有 fork 分支修並 push；更新 LEDGER／HANDOFF。若該 issue 的 claim 被別的 session 持有就換下一支。可做「只清 review」的 session。然後走 **2.0 顧櫃**（`FACTORY-2.0.md`），不是 1.0 搜票。
 1. Check 0：掃 `claims/`，已認領勿深想。
 2. 備選 2–3 題（**優先 deepen** 已有 1 支 PR 的 affinity repo，不要先廣 scout）。
 3. Check 1：原子認領
