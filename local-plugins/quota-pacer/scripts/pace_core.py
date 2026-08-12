@@ -38,14 +38,121 @@ USAGE_STATE = os.environ.get("QP_USAGE_STATE") or os.path.join(
     os.path.expanduser("~"), ".claude", "usage-state.json")
 ACTIVE_FILE = os.environ.get("QP_ACTIVE_FILE") or os.path.join(
     os.path.expanduser("~"), ".claude", "quota-pacer", "active.json")
+CRED_FILE = os.environ.get("QP_CRED_FILE") or os.path.join(
+    os.path.expanduser("~"), ".claude", ".credentials.json")
+USAGE_URL = os.environ.get("QP_USAGE_URL") or "https://api.anthropic.com/api/oauth/usage"
+REFRESH_COOLDOWN = _f("QP_REFRESH_COOLDOWN_SEC", 60)
+REFRESH_MARK = os.path.join(os.path.dirname(ACTIVE_FILE), ".refresh-attempt")
 
 RANK = {"CONTINUE": 0, "WINDDOWN": 1, "HARDSTOP": 2, "EMERGENCY": 3}
 LIMITS = {"5h": "five_hour", "weekly": "seven_day"}
 
-def load_usage():
+def _read_usage_file():
     with open(USAGE_STATE, encoding="utf-8") as fh:
         d = json.load(fh)
     d["_age"] = time.time() - float(d.get("ts", 0))
+    return d
+
+def _iso_to_epoch(s):
+    """ISO 8601（含時區）→ epoch 秒；壞值回 None。"""
+    if not s:
+        return None
+    try:
+        from datetime import datetime
+        return int(datetime.fromisoformat(s).timestamp())
+    except (TypeError, ValueError):
+        return None
+
+def _pct(v):
+    n = _num(v)
+    if n is None:
+        return None
+    return int(n) if float(n).is_integer() else round(n, 1)
+
+def fetch_usage(timeout=10):
+    """打官方 oauth/usage endpoint，轉成 usage-state.json 格式（含 scoped）。
+
+    失敗 raise（OSError/ValueError），由 refresh_usage 統一吞。
+    """
+    import urllib.request  # 延遲載入：hook 路徑 import pace_core 時不揹網路模組
+    with open(CRED_FILE, encoding="utf-8") as fh:
+        cred = json.load(fh)
+    oauth = cred.get("claudeAiOauth", cred)
+    token = oauth.get("accessToken") or oauth.get("access_token")
+    if not token:
+        raise ValueError("credentials 裡沒有 OAuth access token")
+
+    req = urllib.request.Request(USAGE_URL, headers={
+        "Authorization": "Bearer " + token,
+        "anthropic-beta": "oauth-2025-04-20",
+        "User-Agent": "quota-pacer/0.2",
+    })
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        raw = json.loads(resp.read().decode("utf-8"))
+
+    out = {"ts": time.time(), "source": "oauth"}
+    for key in ("five_hour", "seven_day"):
+        blk = raw.get(key) or {}
+        out[key] = {"pct": _pct(blk.get("utilization")),
+                    "resets_at": _iso_to_epoch(blk.get("resets_at"))}
+    scoped = {}
+    for lim in raw.get("limits") or []:
+        if lim.get("kind") != "weekly_scoped":
+            continue
+        model = ((lim.get("scope") or {}).get("model") or {})
+        name = (model.get("display_name") or "scoped").strip().lower().replace(" ", "-")
+        scoped[name] = {"pct": _pct(lim.get("percent")),
+                        "resets_at": _iso_to_epoch(lim.get("resets_at"))}
+    if scoped:
+        out["scoped"] = scoped
+    return out
+
+def refresh_usage(force=False):
+    """拉新用量寫 USAGE_STATE。成功回 dict、失敗/冷卻中回 None，絕不覆寫壞資料。"""
+    if not force:
+        try:
+            if time.time() - os.path.getmtime(REFRESH_MARK) < REFRESH_COOLDOWN:
+                return None
+        except OSError:
+            pass
+    try:
+        os.makedirs(os.path.dirname(REFRESH_MARK), exist_ok=True)
+        with open(REFRESH_MARK, "w"):
+            pass
+    except OSError:
+        pass
+    try:
+        data = fetch_usage()
+    except Exception:
+        return None
+    tmp = USAGE_STATE + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, ensure_ascii=False)
+        os.replace(tmp, USAGE_STATE)
+    except OSError:
+        return None
+    data = dict(data)
+    data["_age"] = 0.0
+    return data
+
+def load_usage(refresh_if_stale=False):
+    """讀 usage state。refresh_if_stale=True 時，檔案缺/過舊就先自拉一次再讀。
+
+    hook 路徑請維持預設 False（PreToolUse 每次工具呼叫都跑，不能揹網路延遲）。
+    """
+    if not refresh_if_stale:
+        return _read_usage_file()
+    try:
+        d = _read_usage_file()
+    except (OSError, ValueError):
+        d = None
+    if d is None or d.get("_age", 0) > STALE:
+        fresh = refresh_usage()
+        if fresh is not None:
+            return fresh
+    if d is None:
+        return _read_usage_file()  # 沒舊檔又刷不到 → 照舊 raise 給呼叫端
     return d
 
 def load_active(path=ACTIVE_FILE):
