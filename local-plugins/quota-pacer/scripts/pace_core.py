@@ -219,4 +219,14 @@ def evaluate(usage, active):
             if RANK[v] > RANK[verdict]:
                 verdict, trigger = v, name
 
+        # scoped weekly（per-model，如 fable）：有基準的每條都套同一公式。
+        # 5h-override 不豁免——它們本質是 weekly。
+        u0_scoped = u0.get("scoped") or {}
+        usage_scoped = usage.get("scoped") or {}
+        for name, base in u0_scoped.items():
+            cur = (usage_scoped.get(name) or {}).get("pct")
+            v = eval_limit(cur, _num(base))
+            if RANK[v] > RANK[verdict]:
+                verdict, trigger = v, "weekly[%s]" % name
+
     return verdict, trigger

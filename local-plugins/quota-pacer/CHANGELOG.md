@@ -1,5 +1,15 @@
 # Quota Pacer CHANGELOG
 
+## 0.3.0 — 2026-08-13
+脫離 CLI statusline：用量自己拉，任何 harness（桌面 App／SDK／headless）都能用用量 guard。
+
+- `pace_core.fetch_usage()`/`refresh_usage()`：讀 `~/.claude/.credentials.json` 的 OAuth token，直接打 `api.anthropic.com/api/oauth/usage`，寫回 `usage-state.json`（原子寫、失敗保留舊檔、60s 冷卻 `QP_REFRESH_COOLDOWN_SEC`）。
+- STALE/MISSING 自動刷新：`read_usage.py` 與 `eval_pace.py` 讀到過舊或缺檔會先自拉一次；「請去 CLI 敲 Enter」流程淘汰。`hardstop_guard`（PreToolUse hook）刻意不刷新，避免每次工具呼叫揹網路延遲。
+- **per-model scoped weekly guard**（roadmap 兌現）：endpoint 的 `limits[]` 裡 `weekly_scoped`（如 Fable）寫進 `usage-state.json` 的 `scoped`；`u0.scoped` 記基準後，`evaluate` 對每條 scoped 套同一門檻公式，trigger 顯示 `weekly[fable]`。`5h-override` 不豁免 scoped（本質是 weekly）。
+- statusline 蓋檔防護：eval 發現 u0 有 scoped 基準但檔案沒 scoped 資料時補刷一次（吃冷卻）。
+- 新參數：`QP_CRED_FILE`、`QP_USAGE_URL`、`QP_REFRESH_COOLDOWN_SEC`(60)。
+- 驗證：refresh 實打 endpoint 綠、evaluate 合成資料 7 case 綠（含舊版抓不到的紅燈對照）、STALE 自動刷新實測綠。
+
 ## 0.2.0 — 2026-07-18
 新增時間 guard（time-box）：跟用量 guard 並存、先到者觸發。
 - 時間 guard 只靠牆鐘，不碰 statusline/用量，所以在讀不到 usage 的環境（SDK/桌面 App）照樣有效。
@@ -22,5 +32,5 @@
 ## Roadmap
 - 同一 session 靠消耗速率預測，無縫接下一個 5h 窗續跑（免重開 session、免跨 session handoff）。
 - 全自動精準 pause N 分鐘再自醒。
-- per-model（Fable）weekly guard（待機器可讀 JSON 提供該欄位）。
 - FLOOR 實際 pp 值校準；null-pct（statusline 沒帶 rate_limits）是否改為保守處理。
+- statusline.sh 也寫 scoped（目前互動 CLI 下它會用無 scoped 版本蓋檔，靠補刷 workaround）。

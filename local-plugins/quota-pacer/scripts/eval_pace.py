@@ -19,13 +19,16 @@ def main():
     usage = None
     note = ""
     try:
-        u = pc.load_usage()
+        u = pc.load_usage(refresh_if_stale=True)
+        # u0 有 scoped 基準但檔案沒 scoped 資料（statusline 蓋檔）→ 補刷一次（吃冷卻）
+        if (active.get("u0") or {}).get("scoped") and not u.get("scoped"):
+            u = pc.refresh_usage() or u
         if u.get("_age", 0) > pc.STALE:
-            note = " ⚠用量STALE({}s)".format(int(u["_age"]))
+            note = " ⚠用量STALE({}s)，自動刷新失敗".format(int(u["_age"]))
         else:
             usage = u
     except (OSError, ValueError):
-        note = " ⚠用量讀不到"
+        note = " ⚠用量讀不到（自動刷新也失敗）"
 
     verdict, trigger = pc.evaluate(usage, active)
 
@@ -41,7 +44,10 @@ def main():
     if usage is not None:
         h5 = usage.get("five_hour", {}).get("pct")
         w = usage.get("seven_day", {}).get("pct")
-        parts.append("5h {}% weekly {}%".format(h5, w))
+        seg = "5h {}% weekly {}%".format(h5, w)
+        for name, blk in (usage.get("scoped") or {}).items():
+            seg += " {} {}%".format(name, blk.get("pct"))
+        parts.append(seg)
 
     print(f"{verdict} {trigger} | {' '.join(parts)}{note}".rstrip())
 
