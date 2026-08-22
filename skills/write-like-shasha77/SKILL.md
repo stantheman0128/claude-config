@@ -33,7 +33,7 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 2. **系列層（依系列參數擇一，只讀對應那份）**：
    - 主線 → `C:\Users\stans\Projects\shasha77\style-spec\mainline.md`：八段骨架（開頭鉤子→hiho 自介→工商→背景→深入分析×N→我們的觀點→提問→結尾）、各段寫法、業配轉場固定文本、轉場句庫、CTA 公式、結尾框。
    - 說書 → `C:\Users\stans\Projects\shasha77\style-spec\series\qiqi-shushu.md`：骨架同源，主體換成逐章導讀一本書（book_info→導讀章節×N→觀點兼書評→分享籲請塞書名→選配導購），附各環節出現率與固定框逐字。
-3. `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` — 真稿選段（逐字標出處）：hook×3、轉場×3、觀點段×2、業配×2、outro×1。仿寫時對照語感，不要整段抄。
+3. `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` — 真稿選段（逐字標出處）：第一到五節是通用錨（hook×3、轉場×3、觀點段×2、業配×2、outro×1）；**第六節領域對照 Hook 只讀本題領域那一則**，不要 16 則全塞進脈絡。仿寫時對照語感，不要整段抄。
 4. `C:\Users\stans\Projects\shasha77\style-spec\anti-examples.md` — 八類「這樣寫就不像」反例＋正解對照＋快速對照表。寫完拿它回頭掃自己的稿。
 
 嚴肅題（性暴力、殯葬、鎮壓、受害者、族群創傷）要先讀 channel-common R10：這類題全程關閉幽默、改共感語氣。
@@ -55,9 +55,9 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 
 目標：給定領域或粗略方向，產出可拍的題目與切入角度。
 
-1. 領域對照職缺七類（生活法律／國際新聞／日韓文化／飲食文化／醫學議題／公共衛生／獵奇有趣），確認題目有知識點、查得到資料佐證。
+1. 領域先對 `style-spec/selection-spec.md` 的 16 類與鑰匙（職缺七類當粗方向）。確認題目有知識點、查得到資料佐證，沒踩 S1-c 禁區。
 2. **查重**：讀 `C:\Users\stans\Projects\shasha77\data\corpus_index.json`（videos 陣列的 title 欄），確認志祺沒做過幾乎一樣的題；撞題就換切角或換題。
-3. 每個提案給：一句話主題、為什麼現在值得做、鉤子的反直覺點、預估的 3-7 個子問題方向、對應 hook 型（懸念提問／時事引入／數據衝擊／情境故事，見 mainline.md 段 1）。
+3. 每個提案給：一句話主題、為什麼現在值得做、鉤子的反直覺點、預估的 3-7 個子問題方向、對應 hook 型（懸念提問／時事引入／數據衝擊／情境故事，見 mainline.md 段 1）、**對應 few-shot.md 第六節該領域那則**（POL 不要拿 HEA 迷思腔開場）。
 4. 產 2-3 個提案讓人選。**停，等人挑一個再進第二段。**
 
 ### 第二段｜寫作指引 + 大綱
@@ -130,7 +130,7 @@ description: "以志祺七七（shasha77）YouTube 風格撰寫影片腳本，�
 | 規則（共同層＋自檢清單，兩系列共用） | `C:\Users\stans\Projects\shasha77\style-spec\channel-common.md` |
 | 規則（系列層：主線骨架） | `C:\Users\stans\Projects\shasha77\style-spec\mainline.md` |
 | 規則（系列層：說書手冊） | `C:\Users\stans\Projects\shasha77\style-spec\series\qiqi-shushu.md` |
-| 真稿選段 | `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` |
+| 真稿選段（第一到五節通用錨；第六節按領域只讀一則） | `C:\Users\stans\Projects\shasha77\style-spec\few-shot.md` |
 | 反例集 | `C:\Users\stans\Projects\shasha77\style-spec\anti-examples.md` |
 | 內容編輯規則（R19＋清單） | `C:\Users\stans\Projects\shasha77\style-spec\content-editing.md` |
 | 內容基準值（30 支真稿實測） | `C:\Users\stans\Projects\shasha77\reports\content_baseline.md` |

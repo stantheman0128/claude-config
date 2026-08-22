@@ -3,6 +3,10 @@
 騙過率＝盲評中仿稿被判 REAL 的比例（愈高愈成功）。過關硬閘另計：正式組總準確率 ≤55%（愈低愈好，50% ＝完全分不出）。兩個指標分開追。
 （2026-07-27 靶修正後：主閘改為風格符合度追平＋編輯台模擬，騙過率降級為追蹤指標，見專案 SPEC §13。）
 
+## v1.4.0（2026-08-23）｜領域對照 few-shot
+
+主線 839 支標完 16 領之後，`style-spec/few-shot.md` 加第六節：每類一則近窗真稿鉤子＋鑰匙表。skill 第 0 步改成「通用錨全讀、領域鉤子只讀本題那則」；提案段改對 `selection-spec` 16 類，不再只用職缺七類。抽取腳本在 `youtuber-style-imitation-research/scripts/extract_domain_fewshot.py`。沒跑新一輪盲評。
+
 ## v1.3.0（2026-08-05）｜內容管線 v1 接入（觀點規劃表＋機械自檢器）
 
 editorial-pass 計畫 M1 前半（specs/2026-08-05-editorial-pass-pipeline-design.md）：①第三段新增強制步驟「觀點規劃表先行」（`templates/viewpoint-plan.md` → `drafts/XXX_viewpoint.md`，R11-R15 強制化）②自檢迴圈前置機械自檢：`scripts/check_draft.py`（字數 3100-3500/單句 60 字/口癖上限/歸屬弱代理）與 `scripts/check_research.py`（查重段/事實列 ≥15/來源欄/棄用區），exit 0 再走人工清單。同步修復 repo 版 SKILL.md 停在 v1.1.0 的漂移（全域與 repo 自本版起同內容）。
