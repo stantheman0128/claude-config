@@ -55,10 +55,20 @@ user-invocable: true
    SKILLSPECTOR_PROVIDER=claude_cli .venv/Scripts/skillspector.exe scan <clone路徑> --format json -o <報告路徑>
    ```
 
-   一律跑完整二階段掃描（靜態＋LLM 語意）。`claude_cli` provider 走本機 `claude` 登入 session，免 API key，候選內容不進第三方。實測 2 個 py 檔約 35 秒；80+ 檔的集合把掃描丟背景，跟 Tier 2 深讀平行跑。
+   一律跑完整二階段掃描（靜態＋LLM 語意）。`claude_cli` provider 走本機 `claude` 登入 session，免 API key，候選內容不進第三方。實測：2 個 py 檔約 35 秒，一份 180 行的 SKILL.md 約 80 秒。80+ 檔的集合把掃描丟背景，跟 Tier 2 深讀平行跑。
+
+   **掃完先驗掃描本身有沒有壞**（在讀 findings 之前）：
+
+   ```bash
+   python -c "import json,sys; m=json.load(open(sys.argv[1],encoding='utf-8'))['metadata']; print({k:m.get(k) for k in ('llm_available','llm_calls_succeeded','llm_calls_attempted','llm_degraded','filtering_mode','meta_analysis_applied')})" <報告路徑>
+   ```
+
+   要看到 `llm_available=True`、`meta_analysis_applied=True`、`llm_degraded` 不存在。**只要 `llm_degraded=True` 或 `filtering_mode=heuristic`，這份報告的分數就是虛高的**：失敗的通常是 meta-analyzer，也就是負責濾誤報的那一關，它掛掉時所有 static findings 原封不動進分數。這種報告不能拿來判定，重跑；連續失敗就當靜態掃描處理，誤報全部人工判。
+
    - 檔數多想先看輪廓，可加 `--no-llm` 跑幾秒的靜態版，但**不能拿靜態結果結案**，補跑完整掃描後才算數。
    - 掃到 `Refusing to resolve a junctioned input` = 目標是 junction／symlink。用 `os.path.realpath` 解出真實路徑再掃（`~/.claude/skills/` 底下有數個 junction 指向 `~/.agents/skills/`）。
    - 掃描器只做靜態分析與內容評估，不執行候選程式碼，符合「clone 內容只讀不執行」。
+   - ⚠️ **升級 skillspector 後要重貼兩個本機 patch**，否則 meta-analyzer 必定逾時：`src/skillspector/state.py` 的 `MAX_WORKFLOW_SECONDS` 與 `src/skillspector/cli.py` 的 `_TRANSITIVE_MAX_SECONDS`，上游都是 `60.0`，改成 `600.0`。原因是 `claude_cli` 每次呼叫都要付 CLI 冷啟動成本，四個分析節點跑不完 60 秒預算，排最後的 meta-analyzer 只分到十幾秒。搜 `Stan local patch 2026-08-28` 可定位。
 3. **分級讀**：
    - **Tier 1｜會執行或被安裝的東西——100% 必讀＋安全審查**：scripts、hooks、install runbook、settings/config 補丁、CI。查外連、寫檔範圍、上游信任通道（fable-soul 的 check_update 教訓）。
    - **Tier 2｜payload 本體——100% 必讀**：每個 SKILL.md／agent .md 全文，**加上它們引用的知識庫檔**（教訓：評 impeccable 的動效能力要讀它的 animate.md，不能拿單次產出當證據）。30+ 檔的大型集合開 Workflow 平行讀（agent 帶 opus），是平行、不是抽樣跳過。
