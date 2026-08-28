@@ -4,8 +4,11 @@
 
 判定寫法＝四象限（有料×用得到）＋動作。「重評觸發」＝什麼情境出現時值得回來再看。**觸發條件中可情境偵測的 6 條已編譯成 `skill-rules.json` 的 `watchlist`**（2026-07-11 起）：任務關鍵字命中時 hook 主動發「🔭 評估紀錄簿觸發」提醒，不必靠人記得回來查。本表增刪「重評觸發」時，同步維護 watchlist。
 
-| repo | 評估（初/重） | 評時版本 | 判定 | 為什麼 | harvest／後續 | 重評觸發 |
-|---|---|---|---|---|---|---|
+**「SkillSpector」欄**（2026-08-28 起）：新評估一律記 `<score>/100 <severity>｜真N 誤M`，判定為真的列規則 ID。08-28 之前評的列留空，重評時補。掃描與誤報判定流程在 `new-skill` 的 2.5 節。
+
+| repo | 評估（初/重） | 評時版本 | 判定 | 為什麼 | harvest／後續 | 重評觸發 | SkillSpector |
+|---|---|---|---|---|---|---|---|
+| `NVIDIA/SkillSpector` | 08-28 初評＋裝 | v2.11.0（clone HEAD 08-28） | **採用：new-skill 流程內建掃描階段** | 71 pattern／17 類的機器掃描，抓到人工審查會漏的攻擊面（shipped `.pyc`、`curl \| bash`）。對 markdown skill 誤報率極高，只能當證據不能當 gate | 裝在 `C:\Users\stans\Projects\skillspector`（venv，`.venv/Scripts/skillspector.exe`）；`claude_cli` provider 免 API key；誤報樣式表已寫進 `new-skill` 2.5 節 | 上游改版新增 pattern 類別→回來更新誤報表；官方若釋出 Claude Code skill 專用 profile（現行按 MCP server 規格要求 `permissions` 欄位，造成 LP1／LP3 系統性誤報）→重評 gate 可行性 | 自掃未做 |
 | `pbakaus/impeccable` | 06-24 採用；07-05 橫評；07-10 重評 confirm | 3.9.1（07-11 晚升級完成：registry 指 3.9.1、overlay 10/10 copy-forward 帶入、grep 5 標記、可執行物差異審乾淨；3.8.0 目錄保留當即時回滾點）；HEAD 630fc26 僅 repo 內部 bot | **採用：前端設計主力** | 硬規則＋偵測器＋slop test 無對手 | overlay 10 條已 patch 檔化（`~/.claude/overlays/impeccable-stan-overlay.md`） | ~~升 3.9.1 另案~~（07-11 已完成）；原生層 ios.md/android.md 於 3.9.1 仍未釋出→出了之後 LINE Notify+ 的 PRODUCT.md 標 android |
 | `opendatalab/MinerU` | 06-28 裝；07-10 重評 confirm | 3.4.4（07-11 晚 Stan 核可升級；HEAD 0dfc946） | **採用：本機 OCR／文件解析** | 公式/表格/多欄最強、資料留本機；office 檔零模型很快 | 07-10 SKILL.md 補 office 路徑/授權/env 小抄；07-11 sweep：3.4.4 兩修正（Latin/CJK 字型誤判偵測、偏移重複字元去重）雙篩過＋逐行審乾淨、對繁中 PDF 直接有感；07-11 晚 Stan 核可→venv 已升 3.4.4（`mineru --version` 驗證） | — |
 | `cloudflare/security-audit-skill` | 06-28 裝；07-10 重評 confirm | 07-10 同步後與上游一致（11 檔）；07-11 sweep 零變化（HEAD 8bac420） | **採用：深度安全稽核** | 六階段＋對抗驗證＋機器可讀，無對手 | 07-10 同步 4 份新 companion＋新 validator | 上游改版→再同步 |
